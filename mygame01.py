@@ -31,6 +31,9 @@ inventory = []
 ## A dictionary linking a room to other rooms
 ## A dictionary linking a room to other rooms
 ## A dictionary linking a room to other rooms
+
+f = open("rooms.txt", "r")
+rooms = f.read()
 '''
 rooms = {
 
@@ -117,6 +120,8 @@ while True:
     if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
         print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
         break
+
+f.close()
 
 
 
