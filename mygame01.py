@@ -2,6 +2,9 @@
 """Driving a simple game framework with
    a dictionary object | Alta3 Research"""
 
+from winreg import DeleteKey
+import random
+
 def showInstructions():
     """Show the game instructions when called"""
     #print a main menu and the commands
@@ -11,11 +14,31 @@ def showInstructions():
     Get to the Garden with a key and a potion to win! Avoid the monsters! Commands include go direction and get item.
     ''')
 
+def description():
+    """description of each room that describes every direction you can go"""
+    if currentRoom == 'Hall':
+        directions = 'You can go south or east.'
+    elif currentRoom == 'Kitchen':
+        directions = 'You can go north.'
+    elif currentRoom == 'Dining Room':
+        directions = 'You can go north, west, east, or south.'
+    elif currentRoom == 'Garden':
+        directions = 'You can go north.'
+    elif currentRoom == 'Balcony':
+        directions = 'You can go west.'
+    else:
+        directions = 'You can go south.'
+    return directions
+    
 def showStatus():
     """determine the current status of the player"""
-    # print the player's current location
     print('---------------------------')
+    # print number of moves
+    print(f'Moves: {movesCounter}')
+    # print the player's current location
     print('You are in the ' + currentRoom)
+    # print available directions
+    print(description())
     # print what the player is carrying
     print('Inventory:', inventory)
     # check if there's an item in the room, if so print it
@@ -31,10 +54,9 @@ inventory = []
 ## A dictionary linking a room to other rooms
 ## A dictionary linking a room to other rooms
 ## A dictionary linking a room to other rooms
+## A dictionary linking a room to other rooms
+## A dictionary linking a room to other rooms
 
-f = open("rooms.txt", "r")
-rooms = f.read()
-'''
 rooms = {
 
             'Hall' : {
@@ -50,6 +72,7 @@ rooms = {
             'Dining Room' : {
                   'north' : 'Bathroom',
                   'west' : 'Hall',
+                  'east' : 'Balcony',
                   'south': 'Garden',
                   'item' : 'potion'
                },
@@ -57,15 +80,17 @@ rooms = {
                   'north' : 'Dining Room'
             },
             'Bathroom' : {
-                    'south' : 'Dining Room',
+                    'south' : 'Dining Room'
+            },
+            'Balcony' : {
+                'west' : 'Dining Room'
             }
          }
-'''
-
 
 
 # start the player in the Hall
 currentRoom = 'Hall'
+movesCounter = 0
 
 showInstructions()
 
@@ -90,6 +115,7 @@ while True:
         if move[1] in rooms[currentRoom]:
             #set the current room to the new room
             currentRoom = rooms[currentRoom][move[1]]
+            movesCounter += 1 # count the number of moves
         # if they aren't allowed to go that way:
         else:
             print('You can\'t go that way!')
@@ -114,15 +140,10 @@ while True:
     ## If a player enters a room with a monster
     if 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
         print('A monster has got you... GAME OVER!')
+        print(f'Moves: {movesCounter - 1}')
         break
 
     ## Define how a player can win
     if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
         print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
         break
-
-f.close()
-
-
-
-
